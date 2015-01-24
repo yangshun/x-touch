@@ -7,10 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreGraphics/CoreGraphics.h>
+
+typedef NS_ENUM(NSUInteger, XTTouchEventType) {
+    XTTouchEventDown,
+    XTTouchEventUp,
+    XTTouchEventMove
+};
 
 @interface XTNetworkInterfaceManager : NSObject
 
 -(void) connectWithHost:(NSString *) serverHost;
--(void) closeConnection;
+-(void) sendTouchEvent:(XTTouchEventType)eventType withXCoord:(CGFloat) x andYCoord:(CGFloat) y;
 
 @end
