@@ -7,7 +7,9 @@
 //
 
 #import "ViewController.h"
+#import "XTNetworkInterfaceManager.h"
 
+#define SERVER_HOST @"http://172.20.10.2:3000"
 #define RED_COLOR [UIColor redColor]
 
 @interface ViewController () {
@@ -19,6 +21,9 @@
     UIView *bottomRight;
     NSMutableArray *vs;
 }
+
+@property (nonatomic) BOOL inRect;
+@property (nonatomic, strong) XTNetworkInterfaceManager *networkManager;
 
 @end
 
@@ -48,6 +53,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.networkManager = [[XTNetworkInterfaceManager alloc] init];
+    [self.networkManager connectWithHost:SERVER_HOST];
     
     vs = [NSMutableArray new];
     topLeft = [UIView new];
@@ -181,23 +189,24 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     CGFloat translatedX = (point.x - topLeft.center.y) / (topRight.center.y - topLeft.center.y);
     CGFloat translatedY = (point.y - bottomLeft.center.x) / (topLeft.center.x - bottomLeft.center.x);
     
-    NSLog(@"%f %f", translatedX, translatedY);
-    if (translatedX < 0.0 || translatedX > 1.0 || translatedY < 0.0 || translatedY > 1.0) {
+    if (translatedX < 0.0
+        || translatedX > 1.0
+        || translatedY < 0.0
+        || translatedY > 1.0
+        || sender.state == UIGestureRecognizerStateEnded) {
+        if (self.inRect == YES) {
+            [self.networkManager sendTouchEvent:XTTouchEventUp withXCoord:translatedX andYCoord:translatedY];
+        }
+        
+        self.inRect = NO;
         return;
     }
     
-    switch (sender.state) {
-        case UIGestureRecognizerStateBegan:
-            break;
-            
-        case UIGestureRecognizerStateChanged:
-            break;
-        
-        case UIGestureRecognizerStateEnded:
-            break;
-            
-        default:
-            break;
+    if (self.inRect == NO) {
+        [self.networkManager sendTouchEvent:XTTouchEventDown withXCoord:translatedX andYCoord:translatedY];
+        self.inRect = YES;
+    } else {
+        [self.networkManager sendTouchEvent:XTTouchEventMove withXCoord:translatedX andYCoord:translatedY];
     }
 }
 

@@ -11,9 +11,9 @@
 
 #define USER_CONNECT_EVENT @"user join"
 #define USER_CONNECTED_EVENT @"user joined"
-#define USER_TOUCH_DOWN_EVENT @"user input touchdown"
-#define USER_TOUCH_UP_EVENT @"user input touchup"
-#define USER_TOUCH_MOVE_EVENT @"user input touchmove"
+#define USER_TOUCH_DOWN_EVENT @"draw touchdown"
+#define USER_TOUCH_UP_EVENT @"draw touchup"
+#define USER_TOUCH_MOVE_EVENT @"draw touchmove"
 
 @interface XTNetworkInterfaceManager ()
 
@@ -50,6 +50,8 @@
     
     NSDictionary *parameters = @{@"userId": self.userId, @"x": xString, @"y": yString};
     [self.sioSocket emit:eventString args:@[parameters]];
+    
+    NSLog(@"%@", eventString);
 }
 
 @end
