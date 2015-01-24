@@ -9,8 +9,13 @@
 #import "ViewController.h"
 
 @interface ViewController () {
-    IBOutlet UIImageView *overlayView;
     AVCaptureVideoPreviewLayer *previewLayer;
+    IBOutlet UIView *overlayView;
+    UIView *topLeft;
+    UIView *topRight;
+    UIView *bottomLeft;
+    UIView *bottomRight;
+    NSMutableArray *vs;
 }
 @end
 
@@ -41,8 +46,20 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    vs = [NSMutableArray new];
+    topLeft = [UIView new];
+    topRight = [UIView new];
+    bottomLeft = [UIView new];
+    bottomRight = [UIView new];
+    [vs addObject:topLeft];
+    [vs addObject:topRight];
+    [vs addObject:bottomLeft];
+    [vs addObject:bottomRight];
+    
+    
     // Do any additional setup after loading the view, typically from a nib.
     imageView.frame = self.view.frame;
+    overlayView.frame = imageView.frame;
     
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
     session.sessionPreset = AVCaptureSessionPreset352x288;
@@ -79,6 +96,12 @@
     
     [session addInput:input];
     [session startRunning];
+    
+    for (UIView *v in vs) {
+        [overlayView addSubview:v];
+        v.frame = CGRectMake(0, 0, 10, 10);
+        v.backgroundColor = [UIColor redColor];
+    }
 }
 
 - (AVCaptureDevice *)backCamera {
@@ -112,35 +135,20 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     CFDictionaryRef attachments = CMCopyDictionaryOfAttachments(kCFAllocatorDefault, sampleBuffer, kCMAttachmentMode_ShouldPropagate);
     CIImage *ciImage = [[CIImage alloc] initWithCVPixelBuffer:pixelBuffer options:(__bridge NSDictionary *)attachments];
     
-    if (attachments)
+    if (attachments) {
         CFRelease(attachments);
+    }
     UIColor *strokeColor = [UIColor redColor];
     UIColor *fillColor = [UIColor redColor];
     
     
     NSArray *rectangles = [self detectRectangles:ciImage];
     for (CIRectangleFeature *rect in rectangles) {
-        UIBezierPath *path = [self createPathFromRect:rect];
-        CGRect bounds = imageView.bounds;
-        
-        UIGraphicsBeginImageContextWithOptions(CGSizeMake(bounds.size.width + 2.0 * 2, bounds.size.width + 2.0 * 2),
-                                               false, [UIScreen mainScreen].scale);
-        
-        CGContextRef context = UIGraphicsGetCurrentContext();
-        
-        // offset the draw to allow the line thickness to not get clipped
-        CGContextTranslateCTM(context, 2, 2);
-        
-        [strokeColor setStroke];
-        [fillColor setFill];
-        
-        [path fill];
-        [path stroke];
-        
-        UIImage *result = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        UIImageView *rectView = [[UIImageView alloc] initWithImage:result];
-        //[imageView addSubview:rectView];
+        topLeft.center = rect.topLeft;
+        topRight.center = rect.topRight;
+        bottomRight.center = rect.bottomRight;
+        bottomLeft.center = rect.bottomLeft;
+        [CATransaction flush];
     }
 }
 
