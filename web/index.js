@@ -29,6 +29,7 @@ io.on('connection', function (socket) {
   socket.on('user join', function () {
     // add the client's username to the global list
     usernames[currentUserId] = currentUserId;
+    socket.currentUserId = currentUserId;
     console.log('user join', currentUserId)
     io.sockets.emit('user joined', {
       newUserId: currentUserId
@@ -38,5 +39,10 @@ io.on('connection', function (socket) {
 
   socket.on('user input', function (data) {
     screen.emit('user input', data);
+  });
+
+  socket.on('disconnect', function () {
+    // remove the username from global usernames list
+    delete usernames[socket.currentUserId];
   });
 });
