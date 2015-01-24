@@ -19,5 +19,6 @@
 - (void)captureOutput:(AVCaptureOutput *)captureOutput
 didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
        fromConnection:(AVCaptureConnection *)connection;
+- (IBAction)handleGesture:(UIPanGestureRecognizer *)sender;
 @end
 

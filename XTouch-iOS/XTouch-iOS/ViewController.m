@@ -8,6 +8,8 @@
 
 #import "ViewController.h"
 
+#define RED_COLOR [UIColor redColor]
+
 @interface ViewController () {
     AVCaptureVideoPreviewLayer *previewLayer;
     UIView *overlayView;
@@ -17,6 +19,7 @@
     UIView *bottomRight;
     NSMutableArray *vs;
 }
+
 @end
 
 @implementation ViewController
@@ -105,7 +108,14 @@
         v.frame = CGRectMake(0, 0, 10, 10);
         v.backgroundColor = [UIColor redColor];
     }
+    
+    
+    
+    
+    
+    
 }
+
 
 - (AVCaptureDevice *)backCamera {
     NSArray *devices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
@@ -141,13 +151,10 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     if (attachments) {
         CFRelease(attachments);
     }
-    UIColor *strokeColor = [UIColor redColor];
-    UIColor *fillColor = [UIColor redColor];
-    
     
     NSArray *rectangles = [self detectRectangles:ciImage];
     
-    CGSize s = self.view.frame.size;
+    CGSize s = overlayView.frame.size;
     CGFloat sy = s.height/352;
     CGFloat sx = s.width/288;
     CGFloat bs = 0; CIRectangleFeature *bestr = nil;
@@ -169,6 +176,31 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     }
 }
 
+- (IBAction)handleGesture:(UIPanGestureRecognizer *)sender {
+    CGPoint point = [sender locationInView:self.view];
+    CGFloat translatedX = (point.x - topLeft.center.y) / (topRight.center.y - topLeft.center.y);
+    CGFloat translatedY = (point.y - bottomLeft.center.x) / (topLeft.center.x - bottomLeft.center.x);
+    
+    NSLog(@"%f %f", translatedX, translatedY);
+    if (translatedX < 0.0 || translatedX > 1.0 || translatedY < 0.0 || translatedY > 1.0) {
+        return;
+    }
+    
+    switch (sender.state) {
+        case UIGestureRecognizerStateBegan:
+            break;
+            
+        case UIGestureRecognizerStateChanged:
+            break;
+        
+        case UIGestureRecognizerStateEnded:
+            break;
+            
+        default:
+            break;
+    }
+}
+
 - (void)logViewHierarchy:(UIView *)view
 {
     NSLog(@"%@", self);
@@ -179,9 +211,6 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)startAction:(id)sender {
-}
 @end
