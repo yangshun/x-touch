@@ -1,5 +1,10 @@
 $(function () {
 
+  var canvas = new fabric.Canvas('drawing_board', {
+    backgroundColor: 'rgb(255,255,224)',
+    height: window.innerWidth * 0.75,
+    width: window.innerWidth
+  });
   var socket = io();
   var users = [];
   // Socket events
@@ -11,7 +16,14 @@ $(function () {
     users.push(userId);
   });
 
-  socket.on('user input', function (data) {
-    console.log(data);
+  socket.on('user input touchmove', function (data) {
+    var point = new fabric.Circle({
+      radius: 20,
+      fill: 'green',
+      left: data.x,
+      top: data.y
+    });
+    canvas.add(point);
   });
+
 });
