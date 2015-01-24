@@ -1,10 +1,14 @@
 PODS:
-  - SocketRocket (0.3.1-beta2)
+  - SIOSocket (0.2.2)
 
 DEPENDENCIES:
-  - SocketRocket (= 0.3.1-beta2)
+  - SIOSocket (from `https://raw.githubusercontent.com/MegaBits/SIOSocket/master/SIOSocket.podspec`)
+
+EXTERNAL SOURCES:
+  SIOSocket:
+    :podspec: https://raw.githubusercontent.com/MegaBits/SIOSocket/master/SIOSocket.podspec
 
 SPEC CHECKSUMS:
-  SocketRocket: 79a68ae186063c65e1fe6f638b1ae2927aa5f304
+  SIOSocket: 2bdcac8c1ae22945fb2b9aca52eaff14848b47f8
 
 COCOAPODS: 0.35.0

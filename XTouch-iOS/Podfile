@@ -1,14 +1,8 @@
 # Uncomment this line to define a global platform for your project
+# platform :ios, '6.0'
+
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '8.0'
+platform :ios, 8.0
+link_with 'XTouch-iOS', 'XTouch-iOSTests'
 
-pod 'SocketRocket', '0.3.1-beta2'
-
-target 'XTouch-iOS' do
-
-end
-
-target 'XTouch-iOSTests' do
-
-end
-
+pod 'SIOSocket', :podspec => 'https://raw.githubusercontent.com/MegaBits/SIOSocket/master/SIOSocket.podspec'
