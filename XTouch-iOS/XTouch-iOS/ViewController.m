@@ -42,6 +42,7 @@
     [super viewDidLoad];
     
     // Do any additional setup after loading the view, typically from a nib.
+    imageView.frame = self.view.frame;
     
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
     session.sessionPreset = AVCaptureSessionPreset352x288;
