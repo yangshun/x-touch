@@ -18,6 +18,7 @@
     UIView *bottomLeft;
     UIView *bottomRight;
     NSMutableArray *vs;
+    NSMutableArray *last;
 }
 
 @end
@@ -59,6 +60,18 @@
     [vs addObject:topRight];
     [vs addObject:bottomLeft];
     [vs addObject:bottomRight];
+    
+    last = [NSMutableArray new];
+    CGPoint tl = CGPointMake(0,0);
+    CGPoint tr = CGPointMake(0,0);
+    CGPoint bl = CGPointMake(0,0);
+    CGPoint br = CGPointMake(0,0);
+    
+    [last addObject:[NSValue valueWithCGPoint:tl]];
+    [last addObject:[NSValue valueWithCGPoint:tr]];
+    [last addObject:[NSValue valueWithCGPoint:bl]];
+    [last addObject:[NSValue valueWithCGPoint:br]];
+
 
     // Do any additional setup after loading the view, typically from a nib.
     imageView.frame = self.view.frame;
@@ -158,6 +171,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     CGFloat sy = s.height/352;
     CGFloat sx = s.width/288;
     CGFloat bs = 0; CIRectangleFeature *bestr = nil;
+    CGFloat rate = 0.4;
     
     for (CIRectangleFeature *rect in rectangles) {
         CGFloat ts = (rect.topRight.x - rect.topLeft.x) * (rect.topRight.y - rect.bottomRight.y);
@@ -168,11 +182,21 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     }
     
     if (bs > 0) {
-        topLeft.center = CGPointMake(bestr.topLeft.y * sy, bestr.topLeft.x * sx);
-        topRight.center = CGPointMake(bestr.topRight.y * sy, bestr.topRight.x * sx);
-        bottomRight.center = CGPointMake(bestr.bottomRight.y * sy, bestr.bottomRight.x * sx);
-        bottomLeft.center = CGPointMake(bestr.bottomLeft.y * sy, bestr.bottomLeft.x * sx);
+        topLeft.center = CGPointMake(bestr.topLeft.y * sy * rate + (1-rate) * [last[0] CGPointValue].x
+                                     , bestr.topLeft.x * sx * rate + (1-rate) * [last[0] CGPointValue].y);
+        topRight.center = CGPointMake(bestr.topRight.y * sy * rate + (1-rate) * [last[1] CGPointValue].x,
+                                      bestr.topRight.x * sx * rate + (1-rate) * [last[1] CGPointValue].y);
+        bottomRight.center = CGPointMake(bestr.bottomRight.y * sy * rate + (1-rate) * [last[2] CGPointValue].x,
+                                         bestr.bottomRight.x * sx * rate + (1-rate) * [last[2] CGPointValue].y);
+        bottomLeft.center = CGPointMake(bestr.bottomLeft.y * sy * rate + (1-rate) * [last[3] CGPointValue].x,
+                                        bestr.bottomLeft.x * sx * rate + (1-rate) * [last[3] CGPointValue].y);
         [CATransaction flush];
+        [last removeAllObjects];
+        [last addObject:[NSValue valueWithCGPoint:CGPointMake(topLeft.center.x, topLeft.center.y)]];
+        [last addObject:[NSValue valueWithCGPoint:CGPointMake(topRight.center.x, topRight.center.y)]];
+        [last addObject:[NSValue valueWithCGPoint:CGPointMake(bottomRight.center.x, bottomRight.center.y)]];
+        [last addObject:[NSValue valueWithCGPoint:CGPointMake(bottomLeft.center.x, bottomLeft.center.y)]];
+
     }
 }
 
