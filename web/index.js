@@ -38,15 +38,15 @@ io.on('connection', function (socket) {
   });
 
   socket.on('user input touchdown', function (data) {
-    screen.emit('user input', data);
+    screen.emit('user input touchdown', data);
   });
 
   socket.on('user input touchup', function (data) {
-    screen.emit('user input', data);
+    screen.emit('user input touchup', data);
   });
 
   socket.on('user input touchmove', function (data) {
-    screen.emit('user input', data);
+    screen.emit('user input touchmove', data);
   });
 
   socket.on('disconnect', function () {
