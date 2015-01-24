@@ -2,7 +2,7 @@ $(function () {
 
   var canvas = new fabric.Canvas('drawing_board', {
     backgroundColor: 'rgb(255,255,224)',
-    height: window.innerHeight,
+    height: window.innerWidth * 0.75,
     width: window.innerWidth
   });
   var socket = io();
@@ -19,7 +19,7 @@ $(function () {
   socket.on('user input', function (data) {
     var point = new fabric.Circle({
       radius: 20,
-      fill: 'blue',
+      fill: 'green',
       left: data.x,
       top: data.y
     });
