@@ -26,15 +26,23 @@ $(function () {
 
   $(document).on('mousedown', function (event) {
     drawing = true;
+    socket.emit('user input touchdown', {
+      userId: currentUser,
+      x: event.pageX,
+      y: event.pageY
+    });
   });
 
   $(document).on('mouseup', function (event) {
     drawing = false;
+    socket.emit('user input touchup', {
+      userId: currentUser
+    });
   });
 
   $(document).on('mousemove', function (event) {
     if (drawing) {
-      socket.emit('user input', {
+      socket.emit('user input touchmove', {
         userId: currentUser,
         x: event.pageX,
         y: event.pageY,

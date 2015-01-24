@@ -16,7 +16,7 @@ $(function () {
     users.push(userId);
   });
 
-  socket.on('user input', function (data) {
+  socket.on('user input touchmove', function (data) {
     var point = new fabric.Circle({
       radius: 20,
       fill: 'green',
