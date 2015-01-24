@@ -31,6 +31,7 @@ bower_components
 
 # For Xcode
 build/
+Pods/
 *.pbxuser
 !default.pbxuser
 *.mode1v3
