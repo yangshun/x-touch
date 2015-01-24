@@ -6,10 +6,18 @@
 //  Copyright (c) 2015 XTouch. All rights reserved.
 //
 
+
 #import <UIKit/UIKit.h>
+#import <AVFoundation/AVFoundation.h>
 
-@interface ViewController : UIViewController
-
-
+@interface ViewController : UIViewController <AVCaptureVideoDataOutputSampleBufferDelegate>
+{
+    __weak IBOutlet UIImageView *imageView;
+    dispatch_queue_t videoDataOutputQueue;
+}
+- (NSArray *)detectRectangles:(CIImage *)image;
+- (void)captureOutput:(AVCaptureOutput *)captureOutput
+didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
+       fromConnection:(AVCaptureConnection *)connection;
 @end
 
