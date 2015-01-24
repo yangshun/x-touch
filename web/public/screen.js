@@ -32,16 +32,19 @@ $(function () {
 
   socket.on('user input touchdown', function (data) {
     var point = new fabric.Point(data.x, data.y);
-    canvas.getObjects().forEach(function (obj) {
-      if (obj.containsPoint(point)) {
-        users[data.userId] = obj;
+    objs = canvas.getObjects();
+    for (var i = objs.length - 1; i >= 0; i--) {
+      if (objs[i].containsPoint(point)) {
+        users[data.userId] = objs[i];
+        objs[i].bringToFront();
+        break;
       }
-    });
+    };
   });
 
   socket.on('user input touchmove', function (data) {
     var target = users[data.userId];
-    if (target) {
+    if (target !== null) {
       target.set({
         left: data.x - target.getWidth() / 2,
         top: data.y - target.getHeight() / 2
@@ -52,6 +55,33 @@ $(function () {
 
   socket.on('user input touchup', function (data) {
     users[data.userId] = null;
+  });
+
+  socket.on('user input image', function (data) {
+    fabric.Image.fromURL(data.imageDataURL, function(img) {
+      img.left = 200;
+      img.top = 1000;
+      img.scale(600 / img.getHeight());
+      canvas.add(img);
+      img.bringToFront();
+      img.animate('top', '-=800', {
+        onChange: canvas.renderAll.bind(canvas),
+        duration: 600,
+        easing: fabric.util.ease.easeOutExpo
+      });
+      var angle = Math.floor(Math.random() * 10) - 5;
+      img.animate('angle', angle, {
+        onChange: canvas.renderAll.bind(canvas),
+        duration: 200,
+        easing: fabric.util.ease.easeOutExpo
+      });
+    });
+  });
+
+  socket.on('user input clear', function (data) {
+    canvas.getObjects().forEach(function (obj) {
+      canvas.fxRemove(obj);
+    });
   })
 
 });

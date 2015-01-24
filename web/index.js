@@ -49,6 +49,14 @@ io.on('connection', function (socket) {
     screen.emit('user input touchmove', data);
   });
 
+  socket.on('user input image', function (data) {
+    screen.emit('user input image', data);
+  });
+
+  socket.on('user input clear', function (data) {
+    screen.emit('user input clear', data);
+  });
+
   socket.on('disconnect', function () {
     // remove the username from global usernames list
     delete usernames[socket.currentUserId];
