@@ -13,17 +13,46 @@ $(function () {
   // Whenever the server emits 'user joined', log it in the chat body
   socket.on('user joined', function (userId) {
     console.log('New user joined: ', userId.newUserId);
-    users.push(userId);
+    users.push({ key: userId.newUserId, value: null });
+    console.log(users);
+  });
+
+  circle = new fabric.Circle({
+    radius: 100,
+    left: 100,
+    top: 100,
+    fill: 'red'
+  });
+  canvas.add(circle);
+
+
+
+  socket.on('user input touchdown', function (data) {
+    console.log('down');
+    var point = new fabric.Point(data.x, data.y);
+    canvas.getObjects().forEach(function (obj) {
+      if (obj.containsPoint(point)) {
+        console.log(obj);
+        users[data.userId] = obj;
+      }
+    });
   });
 
   socket.on('user input touchmove', function (data) {
-    var point = new fabric.Circle({
-      radius: 20,
-      fill: 'green',
-      left: data.x,
-      top: data.y
-    });
-    canvas.add(point);
+    console.log(data.x + ', ' + data.y);
+    var target = users[data.userId];
+    if (target) {
+      target.set({
+        left: data.x - target.getWidth() / 2,
+        top: data.y - target.getHeight() / 2
+      });
+      canvas.renderAll();
+    }
   });
+
+  socket.on('user input touchup', function (data) {
+    console.log('up');
+    users[data.userId] = null;
+  })
 
 });
