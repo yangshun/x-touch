@@ -21,4 +21,24 @@ $(function () {
       });
     }
   });
+
+  var drawing = false;
+
+  $(document).on('mousedown', function (event) {
+    drawing = true;
+  });
+
+  $(document).on('mouseup', function (event) {
+    drawing = false;
+  });
+
+  $(document).on('mousemove', function (event) {
+    if (drawing) {
+      socket.emit('user input', {
+        userId: currentUser,
+        x: event.pageX,
+        y: event.pageY,
+      });
+    }
+  });
 });
