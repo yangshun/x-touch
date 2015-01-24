@@ -25,7 +25,7 @@
 {
     NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:CIDetectorAccuracyHigh, CIDetectorAccuracy, nil];
     CIDetector *rectDetector = [CIDetector detectorOfType:CIDetectorTypeRectangle context:nil options:options];
-    
+
     NSArray *rectangles = [rectDetector featuresInImage:image];
     return rectangles;
 }
@@ -51,22 +51,28 @@
     topRight = [UIView new];
     bottomLeft = [UIView new];
     bottomRight = [UIView new];
+    
+    
     [vs addObject:topLeft];
     [vs addObject:topRight];
     [vs addObject:bottomLeft];
     [vs addObject:bottomRight];
-    
+ 
     
     // Do any additional setup after loading the view, typically from a nib.
     imageView.frame = self.view.frame;
-    overlayView.frame = imageView.frame;
+    
+    CGFloat videoHeight = 352.f/288.f * self.view.frame.size.width;
+    CGFloat offsetTop = (self.view.frame.size.height - videoHeight) / 2;
+    overlayView.frame = CGRectMake(0, offsetTop, self.view.frame.size.width, videoHeight);
+    overlayView.frame = self.view.frame;
     
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
     session.sessionPreset = AVCaptureSessionPreset352x288;
-    
     previewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:session];
     previewLayer.frame = imageView.bounds;
     [imageView.layer addSublayer:previewLayer];
+
     
     NSError *error = nil;
     AVCaptureDevice *device = [self backCamera];
@@ -96,7 +102,7 @@
     
     [session addInput:input];
     [session startRunning];
-    
+
     for (UIView *v in vs) {
         [overlayView addSubview:v];
         v.frame = CGRectMake(0, 0, 10, 10);
@@ -143,13 +149,27 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     
     
     NSArray *rectangles = [self detectRectangles:ciImage];
+ 
+    // 352 288 1024 768
+    
+    CGSize s = self.view.frame.size;
+    CGFloat sx = s.width/352;
+    CGFloat sy = s.height/288;
+    CGFloat bs = 0; CIRectangleFeature *bestr = nil;
+    
     for (CIRectangleFeature *rect in rectangles) {
-        topLeft.center = rect.topLeft;
-        topRight.center = rect.topRight;
-        bottomRight.center = rect.bottomRight;
-        bottomLeft.center = rect.bottomLeft;
-        [CATransaction flush];
+        CGFloat ts = (rect.topRight.x - rect.topLeft.x) * (rect.topRight.y - rect.bottomRight.y);
+        if (ts > bs) {
+            bs = ts;
+            bestr = rect;
+        }
     }
+    
+    topLeft.center = CGPointMake(bestr.topLeft.y * 2.9, bestr.topLeft.x * 2.67);
+    topRight.center = CGPointMake(bestr.topRight.y * 2.9, bestr.topRight.x * 2.67);
+    bottomRight.center = CGPointMake(bestr.bottomRight.y * 2.9, bestr.bottomRight.x * 2.67);
+    bottomLeft.center = CGPointMake(bestr.bottomLeft.y * 2.9, bestr.bottomLeft.x * 2.67);
+    [CATransaction flush];
 }
 
 - (void)logViewHierarchy:(UIView *)view
