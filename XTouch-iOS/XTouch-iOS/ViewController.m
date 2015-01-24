@@ -20,7 +20,7 @@
     UIView *bottomLeft;
     UIView *bottomRight;
     NSMutableArray *vs;
-    NSMutableArray *last;
+    NSArray *last;
 }
 
 @property (nonatomic) BOOL inRect;
@@ -69,17 +69,13 @@
     [vs addObject:bottomLeft];
     [vs addObject:bottomRight];
     
-    last = [NSMutableArray new];
-    CGPoint tl = CGPointMake(0,0);
-    CGPoint tr = CGPointMake(0,0);
-    CGPoint bl = CGPointMake(0,0);
-    CGPoint br = CGPointMake(0,0);
+    last = [NSArray arrayWithObjects:
+            [NSValue valueWithCGPoint:CGPointMake(0, 0)],
+            [NSValue valueWithCGPoint:CGPointMake(0, 0)],
+            [NSValue valueWithCGPoint:CGPointMake(0, 0)],
+            [NSValue valueWithCGPoint:CGPointMake(0, 0)],
+            nil];
     
-    [last addObject:[NSValue valueWithCGPoint:tl]];
-    [last addObject:[NSValue valueWithCGPoint:tr]];
-    [last addObject:[NSValue valueWithCGPoint:bl]];
-    [last addObject:[NSValue valueWithCGPoint:br]];
-
 
     // Do any additional setup after loading the view, typically from a nib.
     imageView.frame = self.view.frame;
@@ -199,20 +195,36 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
         bottomLeft.center = CGPointMake(bestr.bottomLeft.y * sy * rate + (1-rate) * [last[3] CGPointValue].x,
                                         bestr.bottomLeft.x * sx * rate + (1-rate) * [last[3] CGPointValue].y);
         [CATransaction flush];
-        [last removeAllObjects];
-        [last addObject:[NSValue valueWithCGPoint:CGPointMake(topLeft.center.x, topLeft.center.y)]];
-        [last addObject:[NSValue valueWithCGPoint:CGPointMake(topRight.center.x, topRight.center.y)]];
-        [last addObject:[NSValue valueWithCGPoint:CGPointMake(bottomRight.center.x, bottomRight.center.y)]];
-        [last addObject:[NSValue valueWithCGPoint:CGPointMake(bottomLeft.center.x, bottomLeft.center.y)]];
+        
+        last = [NSArray arrayWithObjects:
+                           [NSValue valueWithCGPoint:CGPointMake(topLeft.center.x, topLeft.center.y)],
+                           [NSValue valueWithCGPoint:CGPointMake(topRight.center.x, topRight.center.y)],
+                           [NSValue valueWithCGPoint:CGPointMake(bottomRight.center.x, bottomRight.center.y)],
+                           [NSValue valueWithCGPoint:CGPointMake(bottomLeft.center.x, bottomLeft.center.y)],
+                           nil];
 
     }
 }
 
 - (IBAction)handleGesture:(UIPanGestureRecognizer *)sender {
     CGPoint point = [sender locationInView:self.view];
-    CGFloat translatedX = (point.x - topLeft.center.y) / (topRight.center.y - topLeft.center.y);
-    CGFloat translatedY = (point.y - bottomLeft.center.x) / (topLeft.center.x - bottomLeft.center.x);
     
+    CGPoint tl = [self.view convertPoint:topLeft.center fromView:topLeft.superview];
+    CGPoint tr = [self.view convertPoint:topRight.center fromView:topRight.superview];
+    CGPoint bl = [self.view convertPoint:bottomLeft.center fromView:bottomLeft.superview];
+    CGPoint br = [self.view convertPoint:bottomRight.center fromView:bottomRight.superview];
+    
+    CGFloat translatedX = (point.x - tl.y) / (tr.y - tl.y);
+    CGFloat translatedY = (point.y - bl.x) / (tl.x - bl.x);
+    
+    
+    NSLog(@"%f %f %f %f", tl.x, tl.y, topLeft.center.x, topLeft.center.y);
+//    CGFloat translatedX = (point.x - topLeft.center.y) / (topRight.center.y - topLeft.center.y);
+//    CGFloat translatedY = (point.y - bottomLeft.center.x) / (topLeft.center.x - bottomLeft.center.x);
+    
+//    CGFloat translatedX = (point.x - self.view.frame.origin.y) / (self.view.frame.size.width - self.view.frame.origin.y);
+//    CGFloat translatedY = (point.y - self.view.frame.origin.x) / (self.view.frame.size.height - self.view.frame.origin.x);
+    NSLog(@"%f %f", translatedX, translatedY);
     if (translatedX < 0.0
         || translatedX > 1.0
         || translatedY < 0.0

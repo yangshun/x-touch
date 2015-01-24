@@ -50,8 +50,6 @@
     
     NSDictionary *parameters = @{@"userId": self.userId, @"x": xString, @"y": yString};
     [self.sioSocket emit:eventString args:@[parameters]];
-    
-    NSLog(@"%@", eventString);
 }
 
 @end

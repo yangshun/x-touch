@@ -2,7 +2,7 @@ $(function () {
 
   var canvas = new fabric.Canvas('drawing_board', {
     backgroundColor: 'rgb(255,255,224)',
-    height: window.innerWidth * 0.75,
+    height: window.innerHeight,
     width: window.innerWidth
   });
   var socket = io();
@@ -79,9 +79,7 @@ $(function () {
   });
 
   socket.on('canvas clear', function (data) {
-    canvas.getObjects().forEach(function (obj) {
-      canvas.fxRemove(obj);
-    });
+    canvas.clear();
   });
 
   socket.on('draw touchmove', function (data) {
@@ -92,6 +90,7 @@ $(function () {
       top: data.y * canvas.height
     });
     canvas.add(point);
+    console.log(data);
   });
 
 });
