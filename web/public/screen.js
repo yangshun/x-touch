@@ -30,8 +30,8 @@ $(function () {
     return horiz_in && vert_in;
   };
 
-  socket.on('user input touchdown', function (data) {
-    var point = new fabric.Point(data.x, data.y);
+  socket.on('drag touchdown', function (data) {
+    var point = new fabric.Point(data.x * canvas.width, data.y * canvas.height);
     objs = canvas.getObjects();
     for (var i = objs.length - 1; i >= 0; i--) {
       if (objs[i].containsPoint(point)) {
@@ -42,22 +42,22 @@ $(function () {
     };
   });
 
-  socket.on('user input touchmove', function (data) {
+  socket.on('drag touchmove', function (data) {
     var target = users[data.userId];
-    if (target !== null) {
+    if (target) {
       target.set({
-        left: data.x - target.getWidth() / 2,
-        top: data.y - target.getHeight() / 2
+        left: data.x * canvas.width - target.getWidth() / 2,
+        top: data.y * canvas.height - target.getHeight() / 2
       });
       canvas.renderAll();
     }
   });
 
-  socket.on('user input touchup', function (data) {
+  socket.on('drag touchup', function (data) {
     users[data.userId] = null;
   });
 
-  socket.on('user input image', function (data) {
+  socket.on('add image', function (data) {
     fabric.Image.fromURL(data.imageDataURL, function(img) {
       img.left = 200;
       img.top = 1000;
@@ -78,10 +78,20 @@ $(function () {
     });
   });
 
-  socket.on('user input clear', function (data) {
+  socket.on('canvas clear', function (data) {
     canvas.getObjects().forEach(function (obj) {
       canvas.fxRemove(obj);
     });
-  })
+  });
+
+  socket.on('draw touchmove', function (data) {
+    var point = new fabric.Circle({
+      radius: 20,
+      fill: 'green',
+      left: data.x * canvas.width,
+      top: data.y * canvas.height
+    });
+    canvas.add(point);
+  });
 
 });

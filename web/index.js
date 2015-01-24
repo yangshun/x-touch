@@ -30,31 +30,35 @@ io.on('connection', function (socket) {
     // add the client's username to the global list
     usernames[currentUserId] = currentUserId;
     socket.currentUserId = currentUserId;
-    console.log('user join', currentUserId)
+    console.log('user join', currentUserId);
     io.sockets.emit('user joined', {
       newUserId: currentUserId
     });
     ++currentUserId;
   });
 
-  socket.on('user input touchdown', function (data) {
-    screen.emit('user input touchdown', data);
+  socket.on('drag touchdown', function (data) {
+    screen.emit('drag touchdown', data);
   });
 
-  socket.on('user input touchup', function (data) {
-    screen.emit('user input touchup', data);
+  socket.on('drag touchup', function (data) {
+    screen.emit('drag touchup', data);
   });
 
-  socket.on('user input touchmove', function (data) {
-    screen.emit('user input touchmove', data);
+  socket.on('drag touchmove', function (data) {
+    screen.emit('drag touchmove', data);
   });
 
-  socket.on('user input image', function (data) {
-    screen.emit('user input image', data);
+  socket.on('add image', function (data) {
+    screen.emit('add image', data);
   });
 
-  socket.on('user input clear', function (data) {
-    screen.emit('user input clear', data);
+  socket.on('draw touchmove', function (data) {
+    screen.emit('draw touchmove', data);
+  });
+
+  socket.on('canvas clear', function (data) {
+    screen.emit('canvas clear', data);
   });
 
   socket.on('disconnect', function () {

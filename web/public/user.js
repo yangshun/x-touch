@@ -2,6 +2,7 @@ $(function () {
   var currentUser;
   var connected = false;
   var socket = io();
+  var mode = 'drag';
 
   socket.emit('user join');
   socket.on('user joined', function (payload) {
@@ -12,12 +13,22 @@ $(function () {
     }
   });
 
+  $('#toggle').click(function (e) {
+    if (mode == 'drag') {
+      mode = 'draw';
+      $(this).text('Draw');
+    } else {
+      mode = 'drag';
+      $(this).text('Drag');
+    }
+  });
+
   $('#imgLoader').on('change', function (e) {
     var imageFile = $(this)[0].files[0];
     var reader = new FileReader();
     reader.onload = function (e) {
       if (connected) {
-        socket.emit('user input image', {
+        socket.emit('add image', {
           imageDataURL: e.target.result
         });
       }
@@ -27,7 +38,7 @@ $(function () {
 
   $('#clearer').click(function(e) {
     if (connected) {
-      socket.emit('user input clear', {});
+      socket.emit('canvas clear', {});
     }
   });
 
@@ -36,10 +47,10 @@ $(function () {
   $(document).on('mousedown', function (event) {
     if (connected) {
       drawing = true;
-      socket.emit('user input touchdown', {
+      socket.emit(mode + ' touchdown', {
         userId: currentUser,
-        x: event.pageX,
-        y: event.pageY
+        x: event.pageX / window.innerWidth,
+        y: event.pageY / window.innerHeight
       });
     };
   });
@@ -47,7 +58,7 @@ $(function () {
   $(document).on('mouseup', function (event) {
     if (connected) {
       drawing = false;
-      socket.emit('user input touchup', {
+      socket.emit(mode + ' touchup', {
         userId: currentUser
       });
     }
@@ -55,10 +66,10 @@ $(function () {
 
   $(document).on('mousemove', function (event) {
     if (drawing && connected) {
-      socket.emit('user input touchmove', {
+      socket.emit(mode + ' touchmove', {
         userId: currentUser,
-        x: event.pageX,
-        y: event.pageY,
+        x: event.pageX / window.innerWidth,
+        y: event.pageY / window.innerHeight
       });
     }
   });
