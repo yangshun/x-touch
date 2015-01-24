@@ -37,7 +37,15 @@ io.on('connection', function (socket) {
     ++currentUserId;
   });
 
-  socket.on('user input', function (data) {
+  socket.on('user input touchdown', function (data) {
+    screen.emit('user input', data);
+  });
+
+  socket.on('user input touchup', function (data) {
+    screen.emit('user input', data);
+  });
+
+  socket.on('user input touchmove', function (data) {
     screen.emit('user input', data);
   });
 
