@@ -1,28 +1,73 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Socket.IO Chat Example</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <ul class="pages">
-    <li class="chat page">
-      <div class="chatArea">
-        <ul class="messages"></ul>
-      </div>
-      <input class="inputMessage" placeholder="Type here..."/>
-    </li>
-    <li class="login page">
-      <div class="form">
-        <h3 class="title">What's your nickname?</h3>
-        <input class="usernameInput" type="text" maxlength="14" />
-      </div>
-    </li>
-  </ul>
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>X-Touch</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="/main.js"></script>
-</body>
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/flatly.min.css">
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/animate.css">
+        <link rel="stylesheet" href="css/animations.css">
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+    <body class="theme">
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <!-- Add your site or application content here -->
+        <div class="row main-page full-height xhide">
+            <div class="main-container">
+                <!-- <div class="logo-circle">
+                    <div class="logo-background rotate-clockwise"></div>
+                    <div class="logo-background-2 rotate-anticlockwise"></div>
+                    <div class="logo-container">
+                        <h1 class="logo-icon pulsing-logo"><img class="img-responsive" src="img/logo-white.png"></h1>
+                        <h4 class="page-title logo-title pulsing-logo">X-Touch</h4>
+                        <p class="quote">"Bridging interaction and interfaces."</p>
+                    </div>
+                </div> -->
+                <div class="container-fluid">
+                  <h1 class="title">
+                    <span class="title-left xhide">X-</span><span class="title-right xhide">Touch</span>
+                  </h1>
+                  <p class="subtitle xhide">Bridging physical interfaces. Connecting experiences.</p>
+                </div>
+                <div class="container-fluid">
+                    <div class="row bottom-nav">
+                        <p class="text-center">
+                            <a href="/screen.html" class="start-button btn btn-warning btn-lg xhide">Start</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <script src="jquery-1.10.2.min.js"></script>
+        <script>
+            var started = false;
+            $(function () {
+                $(document).on('keypress', function () {
+                  if (!started) {
+                    started = true;
+                    $('.main-page').addClass('shown');
+                    $('.title-left').addClass('animated zoomInLeft shown');
+                    $('.title-right').addClass('animated zoomInRight shown');
+                    setTimeout(function () {
+                      $('.subtitle').addClass('animated fadeIn shown');
+                      $('.start-button').addClass('animated fadeIn shown');
+                    }, 700);
+                  }
+                });
+            });
+        </script>
+    </body>
 </html>
