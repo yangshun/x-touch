@@ -14,7 +14,7 @@
 #define USER_TOUCH_DOWN_EVENT @"drag touchdown"
 #define USER_TOUCH_UP_EVENT @"drag touchup"
 #define USER_TOUCH_MOVE_EVENT @"drag touchmove"
-#define USER_PHOTO_EVENT @"user image"
+#define USER_PHOTO_EVENT @"show image"
 
 @interface XTNetworkInterfaceManager ()
 

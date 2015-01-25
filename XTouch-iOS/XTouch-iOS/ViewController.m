@@ -241,11 +241,12 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     }
 }
 
-- (IBAction)handlePinchGesture:(id)sender {
-    if (!self.triggeredPhoto) {
-        self.triggeredPhoto = YES;
+- (IBAction)handlePinchGesture:(UIPinchGestureRecognizer *)sender {
+//    if (!self.triggeredPhoto) {
+//        self.triggeredPhoto = YES;
+    if (sender.state == UIGestureRecognizerStateBegan) {
         [self.networkManager triggerPhoto];
-        [self.view removeGestureRecognizer:sender];
+//        [self.view removeGestureRecognizer:sender];
     }
 }
 
