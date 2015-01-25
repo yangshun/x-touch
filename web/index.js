@@ -53,6 +53,10 @@ io.on('connection', function (socket) {
     screen.emit('add image', data);
   });
 
+  socket.on('show image', function (data) {
+    screen.emit('show image', data);
+  });
+
   socket.on('draw touchmove', function (data) {
     screen.emit('draw touchmove', data);
   });
