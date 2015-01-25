@@ -61,6 +61,7 @@ $(function () {
   socket.on('show image', function (data) {
     var img = images.shift();
     if (img) {
+      img.bringToFront();
       img.animate('top', '400', {
         onChange: canvas.renderAll.bind(canvas),
         duration: 600,
