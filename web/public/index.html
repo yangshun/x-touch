@@ -39,7 +39,9 @@
                   <h1 class="title">
                     <span class="title-left xhide">X-</span><span class="title-right xhide">Touch</span>
                   </h1>
-                  <p class="subtitle xhide">Bridging physical interfaces. Connecting experiences.</p>
+                  <p class="subtitle">
+                    <span class="subtitle-top xhide">Bridging physical interfaces.</span><br>
+                    <span class="subtitle-bottom xhide">Connecting experiences.</span></p>
                 </div>
                 <div class="container-fluid">
                     <div class="row bottom-nav">
@@ -59,11 +61,14 @@
                   if (!started) {
                     started = true;
                     $('.main-page').addClass('shown');
-                    $('.title-left').addClass('animated zoomInLeft shown');
-                    $('.title-right').addClass('animated zoomInRight shown');
+                    $('.title-left').addClass('animated bounceInLeft shown');
+                    $('.title-right').addClass('animated bounceInRight shown');
                     setTimeout(function () {
-                      $('.subtitle').addClass('animated fadeIn shown');
-                      $('.start-button').addClass('animated fadeIn shown');
+                      $('.subtitle-top').addClass('animated bounceInLeft shown');
+                      $('.subtitle-bottom').addClass('animated bounceInRight shown');
+                      setTimeout(function () {
+                        $('.start-button').addClass('animated fadeIn shown');
+                      }, 700);
                     }, 700);
                   }
                 });
