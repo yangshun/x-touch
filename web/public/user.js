@@ -14,13 +14,7 @@ $(function () {
   });
 
   $('#toggle').click(function (e) {
-    if (mode == 'drag') {
-      mode = 'draw';
-      $(this).text('Draw');
-    } else {
-      mode = 'drag';
-      $(this).text('Drag');
-    }
+    socket.emit('show image', {});
   });
 
   $('#imgLoader').on('change', function (e) {

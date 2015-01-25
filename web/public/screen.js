@@ -1,12 +1,13 @@
 $(function () {
 
   var canvas = new fabric.Canvas('drawing_board', {
-    backgroundColor: 'rgb(255,255,224)',
+    backgroundColor: 'rgb(0,0,0)',
     height: window.innerHeight,
     width: window.innerWidth
   });
   var socket = io();
   var users = [];
+  var images = [];
   // Socket events
   socket.emit('screen');
 
@@ -15,14 +16,6 @@ $(function () {
     console.log('New user joined: ', userId.newUserId);
     users.push({ key: userId.newUserId, value: null });
   });
-
-  var circle = new fabric.Circle({
-    radius: 100,
-    left: 100,
-    top: 100,
-    fill: 'red'
-  });
-  canvas.add(circle);
 
   fabric.Object.prototype.containsPoint = function(point) {
     var horiz_in = point.x >= this.getLeft() && point.x <= this.getLeft() + this.getWidth();
@@ -53,7 +46,7 @@ $(function () {
     } else {
       var point = new fabric.Circle({
         radius: 20,
-        fill: 'green',
+        fill: 'lightgreen',
         left: data.x * canvas.width,
         top: data.y * canvas.height
       });
@@ -65,25 +58,45 @@ $(function () {
     users[data.userId] = null;
   });
 
-  socket.on('add image', function (data) {
-    fabric.Image.fromURL(data.imageDataURL, function(img) {
-      img.left = 200;
-      img.top = 1000;
-      img.scale(600 / img.getHeight());
-      canvas.add(img);
-      img.bringToFront();
-      img.animate('top', '-=800', {
+  socket.on('show image', function (data) {
+    var img = images.shift();
+    if (img) {
+      img.animate('top', '400', {
         onChange: canvas.renderAll.bind(canvas),
         duration: 600,
         easing: fabric.util.ease.easeOutExpo
       });
-      var angle = Math.floor(Math.random() * 10) - 5;
-      img.animate('angle', angle, {
-        onChange: canvas.renderAll.bind(canvas),
-        duration: 200,
-        easing: fabric.util.ease.easeOutExpo
-      });
-    });
+    }
+  });
+
+  fabric.Image.fromURL('/pic1.jpg', function(img) {
+    img.left = 400;
+    img.top = 2000;
+    img.scale(600 / img.getHeight());
+    img.angle = Math.floor(Math.random() * 10) - 5;
+    canvas.add(img);
+    img.bringToFront();
+    images.push(img);
+  });
+
+  fabric.Image.fromURL('/pic2.jpg', function(img) {
+    img.left = 400;
+    img.top = 2000;
+    img.scale(600 / img.getHeight());
+    img.angle = Math.floor(Math.random() * 10) - 5;
+    canvas.add(img);
+    img.bringToFront();
+    images.push(img);
+  });
+
+  fabric.Image.fromURL('/pic3.jpg', function(img) {
+    img.left = 400;
+    img.top = 2000;
+    img.scale(600 / img.getHeight());
+    img.angle = Math.floor(Math.random() * 10) - 5;
+    canvas.add(img);
+    img.bringToFront();
+    images.push(img);
   });
 
   socket.on('canvas clear', function (data) {
