@@ -29,6 +29,7 @@
 
 @property (nonatomic) BOOL inRect;
 @property (nonatomic, strong) XTNetworkInterfaceManager *networkManager;
+@property (nonatomic) BOOL triggeredPhoto;
 
 @end
 
@@ -62,11 +63,18 @@
     self.networkManager = [[XTNetworkInterfaceManager alloc] init];
     [self.networkManager connectWithHost:SERVER_HOST];
     
+    self.triggeredPhoto = NO;
+    
     vs = [NSMutableArray new];
     topLeft = [UIView new];
     topRight = [UIView new];
     bottomLeft = [UIView new];
     bottomRight = [UIView new];
+    
+    topLeft.backgroundColor = [UIColor redColor];
+    topRight.backgroundColor = [UIColor blueColor];
+    bottomLeft.backgroundColor = [UIColor greenColor];
+    bottomRight.backgroundColor = [UIColor yellowColor];
     
     [vs addObject:topLeft];
     [vs addObject:topRight];
@@ -125,7 +133,7 @@
     for (UIView *v in vs) {
         [overlayView addSubview:v];
         v.frame = CGRectMake(0, 0, 10, 10);
-        v.backgroundColor = [UIColor redColor];
+//        v.backgroundColor = [UIColor redColor];
     }
     
     
@@ -233,6 +241,14 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     }
 }
 
+- (IBAction)handlePinchGesture:(id)sender {
+    if (!self.triggeredPhoto) {
+        self.triggeredPhoto = YES;
+        [self.networkManager triggerPhoto];
+        [self.view removeGestureRecognizer:sender];
+    }
+}
+
 - (IBAction)handleGesture:(UIPanGestureRecognizer *)sender {
     CGPoint point = [sender locationInView:self.view];
     
@@ -241,11 +257,18 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     CGPoint bl = [self.view convertPoint:bottomLeft.center fromView:bottomLeft.superview];
     CGPoint br = [self.view convertPoint:bottomRight.center fromView:bottomRight.superview];
     
-    CGFloat translatedX = (point.x - tl.y) / (tr.y - tl.y);
-    CGFloat translatedY = (point.y - bl.x) / (tl.x - bl.x);
+    CGFloat translatedX = (point.x - bl.x) / (tl.x - bl.x);
+    CGFloat translatedY = (point.y - bl.y) / (tr.y - bl.y);
     
     
-    NSLog(@"%f %f %f %f", tl.x, tl.y, topLeft.center.x, topLeft.center.y);
+    
+    
+//    CGFloat translatedX = (point.x - tl.y) / (tr.y - tl.y);
+//    CGFloat translatedY = (point.y - bl.x) / (tl.x - bl.x);
+    
+    
+    NSLog(@"(%f %f)", point.x, point.y);
+    NSLog(@"(%f %f) (%f %f) (%f %f) (%f %f)", tl.y, tl.x, tr.y, tr.x, bl.y, bl.x, br.y, br.x);
 //    CGFloat translatedX = (point.x - topLeft.center.y) / (topRight.center.y - topLeft.center.y);
 //    CGFloat translatedY = (point.y - bottomLeft.center.x) / (topLeft.center.x - bottomLeft.center.x);
     

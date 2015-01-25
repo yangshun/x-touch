@@ -19,6 +19,7 @@
 - (void)captureOutput:(AVCaptureOutput *)captureOutput
 didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
        fromConnection:(AVCaptureConnection *)connection;
+- (IBAction)handlePinchGesture:(id)sender;
 - (IBAction)handleGesture:(UIPanGestureRecognizer *)sender;
 @end
 

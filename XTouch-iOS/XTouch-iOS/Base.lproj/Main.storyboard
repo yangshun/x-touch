@@ -24,6 +24,7 @@
                         <gestureRecognizers/>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="S0p-9g-qs0" appends="YES" id="vYc-ui-4ep"/>
+                            <outletCollection property="gestureRecognizers" destination="1Nf-ht-HBr" appends="YES" id="ZPG-F5-xrB"/>
                         </connections>
                     </view>
                     <connections>
@@ -36,6 +37,11 @@
                         <action selector="handleGesture:" destination="BYZ-38-t0r" id="zm9-jT-475"/>
                     </connections>
                 </panGestureRecognizer>
+                <pinchGestureRecognizer id="1Nf-ht-HBr">
+                    <connections>
+                        <action selector="handlePinchGesture:" destination="BYZ-38-t0r" id="fOn-dF-1S5"/>
+                    </connections>
+                </pinchGestureRecognizer>
             </objects>
         </scene>
     </scenes>

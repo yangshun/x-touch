@@ -19,5 +19,6 @@ typedef NS_ENUM(NSUInteger, XTTouchEventType) {
 
 -(void) connectWithHost:(NSString *) serverHost;
 -(void) sendTouchEvent:(XTTouchEventType)eventType withXCoord:(CGFloat) x andYCoord:(CGFloat) y;
+-(void) triggerPhoto;
 
 @end
