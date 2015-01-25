@@ -1,0 +1,214 @@
+@font-face {
+  font-family: DINPro;
+  src: url(DINPro-Regular.otf);
+}
+
+@font-face {
+  font-family: DINPro;
+  font-weight: bold;
+  src: url(DINPro-Bold.otf);
+}
+
+@font-face {
+  font-family: DINPro;
+  font-weight: 300;
+  src: url(DINPro-Light.otf);
+}
+
+html, body {
+  font-family: 'DINPro', 'Helvetica-Neue', Helvetica, sans-serif;
+  height: 100%;
+  background-color: #000;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'DINPro', 'Helvetica-Neue', Helvetica, sans-serif;
+}
+
+.full-height {
+  height: 100%;
+}
+
+.theme { 
+  background-image: url(../img/background.jpg);
+  background-size: cover;
+  padding-top: 30px;
+}
+
+.main-page {
+  text-align: center;
+  position: relative;
+}
+
+.main-page .main-container {
+  height: 600px;
+  width: 600px;
+  position: absolute;
+  margin-top: -300px;
+  margin-left: -300px;
+  top: 50%;
+  left: 50%;
+}
+
+.page-title {
+  color: #00bff3;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.main-page .logo-circle {
+  opacity: 0;
+  height: 450px;
+  position: absolute;
+  top: 50%;
+  margin-top: -250px;
+  left: 50%;
+  margin-left: -300px;
+}
+
+.xhide {
+  opacity: 0;
+}
+
+.shown {
+  opacity: 1;
+}
+
+.main-page .logo-circle.shown {
+  opacity: 1;
+}
+
+.main-page .logo-container {
+  padding-top: 5px;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+.main-page .logo-icon {
+  color: #fff;
+  font-size: 192px;
+  font-weight: 300;
+}
+
+.main-page .logo-title {
+  color: #fff;
+  font-size: 32px;
+}
+
+.main-page .logo-background {
+  background-color: rgba(255,255,255,0.3);
+  border-radius: 200px;
+  border: 5px dotted #0a3530;
+  height: 400px;
+  position: absolute;
+  left: 50%;
+  margin-left: -200px;
+  top: 0;
+  width: 400px;
+}
+
+.main-page .logo-background-2 {
+  width: 450px;
+  height: 450px;
+  border-radius: 225px;
+  border: 5px dashed #fff;
+  position: absolute;
+  left: 50%;
+  margin-left: -225px;
+  top: -25px;
+}
+
+.main-page .quote {
+  color: #fff;
+  font-style: italic;
+  font-size: 14px;
+}
+
+@-webkit-keyframes spin {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to { 
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+.rotate-clockwise {
+  -webkit-animation-name:             spin; 
+  -webkit-animation-duration:         30s; 
+  -webkit-animation-iteration-count:  infinite;
+  -webkit-transition-timing-function: linear;
+}
+
+@-webkit-keyframes spin-reverse {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to { 
+    -webkit-transform: rotate(-360deg);
+  }
+}
+
+.rotate-anticlockwise {
+  -webkit-animation-name:             spin-reverse; 
+  -webkit-animation-duration:         45s; 
+  -webkit-animation-iteration-count:  infinite;
+  -webkit-transition-timing-function: linear;
+}
+
+
+@-webkit-keyframes pulsate {
+  to { 
+    -webkit-text-shadow: 0 0 60px rgba(23, 218, 197, .75);
+    -moz-text-shadow: 0 0 60px rgba(23, 218, 197, .75);
+    text-shadow: 0 0 60px rgba(23, 218, 197, .75);
+  }
+}
+
+@keyframes pulsate {
+  to { 
+    -webkit-text-shadow: 0 0 60px rgba(23, 218, 197, .75);
+    -moz-text-shadow: 0 0 60px rgba(23, 218, 197, .75);
+    text-shadow: 0 0 60px rgba(23, 218, 197, .75);
+  }
+}
+
+.pulsing-logo {
+  animation: pulsate 1s infinite alternate;
+  -webkit-animation: pulsate 1s infinite alternate;
+}
+
+.logo-icon img {
+  margin: 0 auto;
+  width: 35%;
+}
+
+.main-page .bottom-nav {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  height: 180px;
+  width: 100%;
+  margin: 0;
+}
+
+.title {
+  color: #fff;
+  font-size: 128px;
+  font-weight: bold;
+  margin-top: 100px;
+  text-transform: uppercase;
+}
+
+.subtitle {
+  color: #fff;
+  font-size: 32px;
+  font-style: italic;
+}
+
+.start-button {
+  font-size: 24px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
