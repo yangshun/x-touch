@@ -50,6 +50,14 @@ $(function () {
         top: data.y * canvas.height - target.getHeight() / 2
       });
       canvas.renderAll();
+    } else {
+      var point = new fabric.Circle({
+        radius: 20,
+        fill: 'green',
+        left: data.x * canvas.width,
+        top: data.y * canvas.height
+      });
+      canvas.add(point);
     }
   });
 
@@ -82,15 +90,15 @@ $(function () {
     canvas.clear();
   });
 
-  socket.on('draw touchmove', function (data) {
-    var point = new fabric.Circle({
-      radius: 20,
-      fill: 'green',
-      left: data.x * canvas.width,
-      top: data.y * canvas.height
-    });
-    canvas.add(point);
-    console.log(data);
-  });
+  // socket.on('draw touchmove', function (data) {
+  //   var point = new fabric.Circle({
+  //     radius: 20,
+  //     fill: 'green',
+  //     left: data.x * canvas.width,
+  //     top: data.y * canvas.height
+  //   });
+  //   canvas.add(point);
+  //   console.log(data);
+  // });
 
 });
